@@ -1,12 +1,8 @@
-import 'package:assignment_app/Pages/HomePage.dart';
-import 'package:assignment_app/getData/getdata.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:assignment_app/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:http/http.dart' as http;
 
 class demo extends StatefulWidget {
   demo({super.key});
@@ -17,29 +13,28 @@ class demo extends StatefulWidget {
 }
 
 class _demoState extends State<demo> {
-  int _currentIndex = 0;
-  final search = "data";
+  final search = "'Courses'";
   String _selectedValue = 'Option 1';
   List<String> _dropdownValues = ['Option 1', 'Option 2', 'Option 3'];
 
-  List<dynamic> docIDs = [];
-  CollectionReference _collectionReference =
-      FirebaseFirestore.instance.collection('Courses');
+  // List<dynamic> docIDs = [];
+  // CollectionReference _collectionReference =
+  // FirebaseFirestore.instance.collection('Courses');
 
-  Future getCourse() async {
-    await FirebaseFirestore.instance.collection('Courses').get().then(
-          (snapshot) => snapshot.docs.forEach(
-            (course) {
-              print(course.reference);
-              print(course.data());
-              docIDs.add(course.reference.id);
-            },
-          ),
-        );
-    // QuerySnapshot querySnapshot = await _collectionReference.get();
-    // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    // print(allData);
-  }
+  // Future getCourse() async {
+  //   await FirebaseFirestore.instance.collection('Courses').get().then(
+  //         (snapshot) => snapshot.docs.forEach(
+  //           (course) {
+  //             print(course.reference);
+  //             print(course.data());
+  //             docIDs.add(course.reference.id);
+  //           },
+  //         ),
+  //       );
+  // QuerySnapshot querySnapshot = await _collectionReference.get();
+  // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  // print(allData);
+  // }
 
   // @override
   // void initState() {
@@ -69,19 +64,19 @@ class _demoState extends State<demo> {
               onTap: () {},
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 2),
-            child: Expanded(
-              child: VerticalDivider(
-                thickness: 1,
-                indent: 12,
-                endIndent: 12,
-              ),
-            ),
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 2),
+          //   child: Expanded(
+          //     child: VerticalDivider(
+          //       thickness: 1,
+          //       indent: 12,
+          //       endIndent: 12,
+          //     ),
+          //   ),
+          // ),
           GestureDetector(
             child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 6),
+              padding: EdgeInsets.symmetric(vertical: 18, horizontal: 6),
               child: Text(
                 "Login",
                 style: TextStyle(
@@ -93,16 +88,16 @@ class _demoState extends State<demo> {
             ),
             onTap: () {},
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 2),
-            child: Expanded(
-              child: VerticalDivider(
-                thickness: 1,
-                indent: 12,
-                endIndent: 12,
-              ),
-            ),
-          ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 2),
+          //   child: Expanded(
+          //     child: VerticalDivider(
+          //       thickness: 1,
+          //       indent: 12,
+          //       endIndent: 12,
+          //     ),
+          //   ),
+          // ),
           PopupMenuButton(
             icon: const Icon(
               Icons.menu,
@@ -132,29 +127,8 @@ class _demoState extends State<demo> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          // Expanded(
-          //     child: FutureBuilder(
-          //   future: getCourse(),
-          //   builder: (context, snapshot) {
-          //     return ListView.builder(
-          //       itemCount: docIDs.length,
-          //       itemBuilder: (context, index) {
-          //         return ListTile(
-          //           title: GetData(docuId: docIDs[index]),
-          //         );
-          //       },
-          //     );
-          //   },
-          // )),
-          // Container(
-          //   child: Column(
-          //     children: [
-          //       Text(""),
-          //     ],
-          //   ),
-          // ),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           Material(
             shadowColor: Colors.transparent,
@@ -279,7 +253,7 @@ class _demoState extends State<demo> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "Search results for $search",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 25,
                   ),
@@ -290,70 +264,13 @@ class _demoState extends State<demo> {
           const SizedBox(
             height: 20,
           ),
-          Container(
-            height: 250,
-            width: 390,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 3,
-                )
-              ],
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.white,
-            ),
-            child: Row(children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 140, top: 20),
-                    child: Image.asset(
-                      "Images/stan.png",
-                      scale: 5,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30, left: 30),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Get started with Flutter Development",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        // ElevatedButton(
-                        //     onPressed: () async {
-                        //       DocumentSnapshot _ds = await FirebaseFirestore
-                        //           .instance
-                        //           .collection("Courses")
-                        //           .doc('qZpSGknh38F2J9gEvdjH')
-                        //           .get();
-                        //       Object? mapEventData = _ds.data();
-                        //       final field = _ds.data;
-                        //       print(mapEventData);
-                        //     },
-                        //     child: Text("Print")),
 
-                        // Text(GetData(docuId: docIDs.)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ]),
-          ),
-          SizedBox(
-            height: 10,
-          ),
+          //First container for Flutter development collection
           Container(
             height: 250,
             width: 390,
             decoration: BoxDecoration(
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.grey,
                   blurRadius: 3,
@@ -367,82 +284,1056 @@ class _demoState extends State<demo> {
                 Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 30),
+                      padding:
+                          const EdgeInsets.only(bottom: 120, top: 0, left: 20),
                       child: Image.asset(
                         "Images/stan.png",
-                        scale: 4,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topLeft,
+                        scale: 5,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Get started with Flutter Development",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    )
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 23,
+                        left: 15,
+                        right: 0,
+                      ),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Courses')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          List<Column> clientWidgets = [];
+                          if (snapshot.hasData) {
+                            final clients =
+                                snapshot.data?.docs.reversed.toList();
+                            for (var client in clients!) {
+                              final clientWidget = Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      launchUrlString(
+                                          "https://www.udemy.com/course/flutter-bootcamp-with-dart/");
+                                    },
+                                    child: Text(
+                                      client['courseName'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 7,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      client['UniName'],
+                                      style: const TextStyle(
+                                          // fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 210),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.green,
+                                      ),
+                                      // color: Colors.green,
+                                      child: Row(
+                                        children: const [
+                                          Icon(
+                                            Icons.star_half,
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            "4.5  ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 205),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.monetization_on_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Fees'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 217),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.location_on_sharp),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Location'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 195),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.work_outline_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Method'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 176),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.timer_outlined),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            client['Duration'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                              clientWidgets.add(clientWidget);
+                            }
+                          }
+                          return Row(
+                            children: clientWidgets,
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
           ),
-          Card(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 100, vertical: 100),
-              child: Column(
-                children: [
-                  Text("Get started with flutter development"),
-                ],
-              ),
-            ),
+          const SizedBox(
+            height: 10,
           ),
-          Card(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 100, vertical: 100),
-              child: Column(
-                children: [
-                  Text("Get started with flutter development"),
-                ],
-              ),
+
+          //Conatiner for React native collection
+          Container(
+            height: 250,
+            width: 390,
+            decoration: BoxDecoration(
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 3,
+                )
+              ],
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
             ),
-          ),
-          Card(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 100, vertical: 100),
-              child: Column(
-                children: [
-                  Text("Get started with flutter development"),
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Material(
-              shadowColor: Colors.grey,
-              elevation: 5,
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 170, vertical: 100),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(10),
-                  // boxShadow: BoxShadow(
-                  //   color: Colors.black
-                  //   blurRadius: 4,
-                  //   spreadRadius: .05,
-                  // ),
-                ),
-                child: Row(
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    Text("Get started with Flutter Development"),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 120, top: 0, left: 20),
+                      child: Image.asset(
+                        "Images/coursera.jpeg",
+                        scale: 5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 23,
+                        left: 15,
+                        right: 0,
+                      ),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('react')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          List<Column> clientWidgets = [];
+                          if (snapshot.hasData) {
+                            final clients =
+                                snapshot.data?.docs.reversed.toList();
+                            for (var client in clients!) {
+                              final clientWidget = Column(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      launchUrlString(
+                                          "https://www.coursera.org/specializations/meta-react-native");
+                                    },
+                                    child: Text(
+                                      client['courseName'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 7,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 30),
+                                    child: Text(
+                                      client['UniName'],
+                                      style: const TextStyle(
+                                          // fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 180),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.green,
+                                      ),
+                                      // color: Colors.green,
+                                      child: Row(
+                                        children: const [
+                                          Icon(
+                                            Icons.star_half,
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            "4.5  ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 179),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.monetization_on_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Fees'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 192),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.location_on_sharp),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Location'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 168),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.work_outline_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Method'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 150),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.timer_outlined),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            client['Duration'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                              clientWidgets.add(clientWidget);
+                            }
+                          }
+                          return Row(
+                            children: clientWidgets,
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
-                // ),
-              ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+
+          //Container for vue.js collection
+          Container(
+            height: 250,
+            width: 390,
+            decoration: BoxDecoration(
+              boxShadow: [
+                const BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 3,
+                )
+              ],
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 120, top: 0, left: 20),
+                      child: Image.asset(
+                        "Images/udemy.png",
+                        scale: 2.5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 23, left: 15),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Vue.js')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          List<Column> clientWidgets = [];
+                          if (snapshot.hasData) {
+                            final clients =
+                                snapshot.data?.docs.reversed.toList();
+                            for (var client in clients!) {
+                              final clientWidget = Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 145),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        launchUrlString(
+                                            "https://www.udemy.com/course/vuejs-2-the-complete-guide/");
+                                      },
+                                      child: Text(
+                                        client['courseName'],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 7,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 55),
+                                    child: Text(
+                                      client['UniName'],
+                                      style: const TextStyle(
+                                          // fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 185),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.green,
+                                      ),
+                                      // color: Colors.green,
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star_half,
+                                            color: Colors.white,
+                                          ),
+                                          const Text(
+                                            "4.5  ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 175),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.monetization_on_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Fees'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 190),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.location_on_sharp),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Location'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 165),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.work_outline_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Method'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 145),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.timer_outlined),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            client['Duration'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                              clientWidgets.add(clientWidget);
+                            }
+                          }
+                          return Row(
+                            children: clientWidgets,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+
+          //Container for Javascript collection
+          Container(
+            height: 250,
+            width: 390,
+            decoration: BoxDecoration(
+              boxShadow: [
+                const BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 3,
+                )
+              ],
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 120, top: 0, left: 20),
+                      child: Image.asset(
+                        "Images/udemy.png",
+                        scale: 2.5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 23,
+                        left: 15,
+                        right: 0,
+                      ),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Javascript')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          List<Column> clientWidgets = [];
+                          if (snapshot.hasData) {
+                            final clients =
+                                snapshot.data?.docs.reversed.toList();
+                            for (var client in clients!) {
+                              final clientWidget = Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 150),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        launchUrlString(
+                                            "https://www.udemy.com/course/the-complete-javascript-course/");
+                                      },
+                                      child: Text(
+                                        client['courseName'],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 7,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 90),
+                                    child: Text(
+                                      client['UniName'],
+                                      style: const TextStyle(
+                                          // fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 215),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.green,
+                                      ),
+                                      // color: Colors.green,
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star_half,
+                                            color: Colors.white,
+                                          ),
+                                          const Text(
+                                            "4.5  ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 205),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.monetization_on_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Fees'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 219),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.location_on_sharp),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Location'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 195),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.work_outline_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Method'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 176),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.timer_outlined),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            client['Duration'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                              clientWidgets.add(clientWidget);
+                            }
+                          }
+                          return Row(
+                            children: clientWidgets,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+
+          //Container for Data science collection
+          Container(
+            height: 250,
+            width: 390,
+            decoration: BoxDecoration(
+              boxShadow: [
+                const BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 3,
+                )
+              ],
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 120, top: 0, left: 20),
+                      child: Image.asset(
+                        "Images/coursera.jpeg",
+                        scale: 5,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 23,
+                        left: 15,
+                        right: 0,
+                      ),
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('Data Science')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          List<Column> clientWidgets = [];
+                          if (snapshot.hasData) {
+                            final clients =
+                                snapshot.data?.docs.reversed.toList();
+                            for (var client in clients!) {
+                              final clientWidget = Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 135),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        launchUrlString(
+                                            "https://www.coursera.org/degrees/master-of-applied-data-science-umich");
+                                      },
+                                      child: Text(
+                                        client['courseName'],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 7,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 75),
+                                    child: Text(
+                                      client['UniName'],
+                                      style: const TextStyle(
+                                          // fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 210),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.green,
+                                      ),
+                                      // color: Colors.green,
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star_half,
+                                            color: Colors.white,
+                                          ),
+                                          const Text(
+                                            "4.5  ",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 195),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.monetization_on_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Fees'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 217),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.location_on_sharp),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Location'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 195),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.work_outline_rounded),
+                                          const SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            client['Method'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 170),
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.timer_outlined),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            client['Duration'],
+                                            overflow: TextOverflow.ellipsis,
+                                            // softWrap: false,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 17),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                              clientWidgets.add(clientWidget);
+                            }
+                          }
+                          return Row(
+                            children: clientWidgets,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ]),
@@ -450,45 +1341,45 @@ class _demoState extends State<demo> {
         // ],
       ),
       // )
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blueAccent,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore_rounded),
-            label: 'Explore',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_rounded),
-            label: 'Contribute',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard_rounded),
-            label: 'Rewards',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   // currentIndex: _currentIndex,
+      //   // onTap: onTapped,
+      //   // type: BottomNavigationBarType.fixed,
+      //   selectedItemColor: Colors.blueAccent,
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.explore_rounded),
+      //       label: 'Explore',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.add_box_rounded),
+      //       label: 'Contribute',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.card_giftcard_rounded),
+      //       label: 'Rewards',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: 'Profile',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   onTap: (setValue) {
+      //     _selectedIndex = setValue;
+      //   },
+      // ),
     );
   }
 
   void _showPopupMenu(BuildContext context) async {
     Object? newValue = await showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(0, 200, 50, 50),
+      position: const RelativeRect.fromLTRB(0, 200, 50, 50),
       items: <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
           value: 'Option 1',
@@ -528,7 +1419,115 @@ class GetData extends StatelessWidget {
                 snapshot.data!.data() as Map<String, dynamic>;
             return Text('Course Name: ${data1['subCategory']}');
           }
-          return Text("Loading");
+          return const Text("Loading");
         }));
   }
 }
+
+
+//firebase fetch 
+// Padding(
+                //   padding: const EdgeInsets.only(left: 20, right: 0),
+                //   child:
+                // Row(
+                //   children: [
+                // StreamBuilder(
+                //   stream: FirebaseFirestore.instance
+                //       .collection('Courses')
+                //       .snapshots(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       return Text("Loading... Please wait!");
+                //     }
+                //     return Column(
+                //       children: [
+                //         Text(snapshot.data?.docs[0]['courseName']),
+                //         // snapshot.data?.docs[0]['courseName'],
+                //       ],
+                //     );
+                //   },
+                // )
+
+                // StreamBuilder<QuerySnapshot>(
+                //   stream: FirebaseFirestore.instance
+                //       .collection('Courses')
+                //       .snapshots(),
+                //   builder: (context, snapshot) {
+                //     List<Column> clientWidgets = [];
+                //     if (snapshot.hasData) {
+                //       final clients = snapshot.data?.docs.reversed.toList();
+                //       for (var client in clients!) {
+                //         final clientWidget = Column(
+                //           children: [
+                //             Text(
+                //               client['courseName'],
+                //               style: TextStyle(
+                //                   fontWeight: FontWeight.bold,
+                //                   fontSize: 17),
+                //             ),
+                //             SizedBox(
+                //               height: 20,
+                //             ),
+                //             Text(
+                //               client['courseSummary'],
+                //               overflow: TextOverflow.ellipsis,
+                //               // softWrap: false,
+                //               style: TextStyle(
+                //                   fontWeight: FontWeight.bold,
+                //                   fontSize: 10),
+                //             ),
+
+                //             // Text(client['Fees']),
+                //           ],
+                //         );
+                //         clientWidgets.add(clientWidget);
+                //       }
+                //     }
+                //     return Column(
+                //       children: clientWidgets,
+                //     );
+                //   },
+                // ),
+
+                // StreamBuilder(
+                //   stream: FirebaseFirestore.instance
+                //       .collection("Courses")
+                //       .snapshots(),
+                //   // builder: (context, snapshot) {},
+                //   builder: (context, snapshot) {
+                //     return !snapshot.hasData
+                //         ? Text('PLease Wait')
+                //         : ListView.builder(
+                //             itemCount: snapshot.data?.docs.length,
+                //             itemBuilder: (context, index) {
+                //               QueryDocumentSnapshot<
+                //                       Map<String, dynamic>>? course =
+                //                   snapshot.data?.docs[index];
+                //               return CourseItem(
+                //                 name: course!['courseName'],
+                //                 // imageUrl: course['imageURL'],
+                //                 // price: course['price'],
+                //                 // discription: course['description'],
+                //               );
+                //             },
+                //           );
+                //   },
+                // ),
+                // )
+                // ElevatedButton(
+                //     onPressed: () async {
+                //       DocumentSnapshot _ds = await FirebaseFirestore
+                //           .instance
+                //           .collection("Courses")
+                //           .doc('qZpSGknh38F2J9gEvdjH')
+                //           .get();
+                //       Object? mapEventData = _ds.data();
+                //       final field = _ds.data;
+                //       print(mapEventData);
+                //     },
+                //     child: Text("Print")),
+
+                // Text(GetData(docuId: docIDs.)),
+                //   ],
+                // ),
+                // ),
